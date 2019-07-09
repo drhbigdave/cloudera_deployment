@@ -4,16 +4,16 @@
 
 
 
-wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh
-bash ~/anaconda.sh -b -p $HOME/anaconda3
+#wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh
+#bash ~/anaconda.sh -b -p $HOME/anaconda3
 #export PATH="$HOME/anaconda3/bin:$PATH"
 
 #mkdir $HOME/certs
 #mkdir $HOME/.jupyter
 
-wget https://downloads.lightbend.com/scala/2.12.6/scala-2.12.6.rpm
+#wget https://downloads.lightbend.com/scala/2.12.6/scala-2.12.6.rpm
 
-sudo yum install -y scala-2.12.6.rpm
+#sudo yum install -y scala-2.12.6.rpm
 
 sudo $HOME/anaconda3/bin/conda install -y pip
 

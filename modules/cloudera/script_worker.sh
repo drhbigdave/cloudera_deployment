@@ -27,7 +27,7 @@ sudo mkfs -t ext4  /dev/VolGroup01/cloudera
 #  create second volume group and mount it in the gitlab install directory
 # vgcreate /dev/VolGroup01 /dev/sdc #why is this here?
 mkdir /usr/local/cloudera
-printf "/dev/mapper/VolGroup01-cloudera /usr/local/spark  ext4    defaults        0 0" >> /etc/fstab
+printf "/dev/mapper/VolGroup01-cloudera /usr/local/cloudera  ext4    defaults        0 0" >> /etc/fstab
 mount -a
 touch /tmp/test1
 

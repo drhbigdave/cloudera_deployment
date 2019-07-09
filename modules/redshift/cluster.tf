@@ -41,3 +41,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
 output "redshift_endpoint" {
   value = "${aws_redshift_cluster.redshift_cluster.*.endpoint}"
 }
+
+data "redshift_endpoint" "redshift_endpoint_for_var" {
+  value = "${aws_redshift_cluster.redshift_cluster.*.endpoint}"
+}

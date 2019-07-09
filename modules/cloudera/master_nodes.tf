@@ -1,3 +1,18 @@
+data "aws_ssm_parameter" "db_pw" {
+  name = "redshift_pw"
+}
+
+output "db_pw_string" {
+ value = "${data.aws_ssm_parameter.db_pw.value}"
+}
+data "aws_ssm_parameter" "db_master" {
+  name = "redshift_master"
+}
+
+output "db_master_string" {
+ value = "${data.aws_ssm_parameter.db_master.value}"
+}
+
 data "aws_iam_instance_profile" "cloudera_master" {
   name = "cloudera_instance_role"
 }
@@ -57,6 +72,25 @@ resource "aws_instance" "cloudera_master" {
       "sudo chmod +x ~/script_master.sh",
       "sudo /home/maintuser/script_master.sh"
     ]
+  }
+
+  data "template_file" "sql_script" {
+    template = "${file("${path.module}/redshift_sql.sh")}"
+    vars {
+      redshift_usr_name = "${data.aws_ssm_parameter.db_master.value}"
+      redshift_secret = "${data.aws_ssm_parameter.db_pw.value}"
+      redshift_end_point = "${data.redshift_endpoint.redshift_endpoint_for_var.value}"
+    }
+  }
+  provisioner "file" {
+    source      = "${data.template_file.sql_script.rendered}"
+    destination = "/home/maintuser/redshift_sql_r.sh"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /home/maintuser/redshift_sql.sh",
+      "sudo /home/maintuser/redshift_sql_r.sh"
+      ]
   }
 
 #  provisioner "file" {

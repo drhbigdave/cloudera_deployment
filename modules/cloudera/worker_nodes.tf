@@ -50,7 +50,7 @@ resource "aws_instance" "cloudera_worker" {
         pip install awscli
         pvcreate /dev/nvme1n1
         vgcreate /dev/VolGroup01 /dev/nvme1n1
-        lvcreate -n spark -l 100%FREE VolGroup01
+        lvcreate -n cloudera -l 100%FREE VolGroup01
         sudo mkfs -t ext4  /dev/VolGroup01/cloudera
         mkdir /usr/local/cloudera
         printf "/dev/mapper/VolGroup01-cloudera /usr/local/cloudera  ext4    defaults        0 0" >> /etc/fstab

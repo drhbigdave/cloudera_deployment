@@ -13,22 +13,22 @@ module "cloudera" {
   subnet_pub    = "${module.network.external_subnet_output}"
   subnet_priv    = "${module.network.internal_subnet_output}"
 }
-#module "redshift" {
-#  count              = 1
-#  sg_count           = 1
-#  source             = "../../modules/redshift/"
-#  cluster_name       = "redshift1"
-#  db_name            = "redshiftdb"
-#  node_type          = "dc2.large"
-#  cluster_type       = "multi-node"
-#  nodes              = 2
-#  subnet_group_name  = "group1"
-#  enhanced           = true
-#  iam_roles          = "udemy_pipeline"
-#  final_snap         = true
-#  subnet    = "${module.network.external_subnet_output}"
-#  availability_zone  = "us-east-1a" #improve
-#}
+module "redshift" {
+  count              = 1
+  sg_count           = 1
+  source             = "../../modules/redshift/"
+  cluster_name       = "redshift1"
+  db_name            = "redshiftdb"
+  node_type          = "dc2.large"
+  cluster_type       = "multi-node"
+  nodes              = 2
+  subnet_group_name  = "group1"
+  enhanced           = true
+  iam_roles          = "udemy_pipeline"
+  final_snap         = true
+  subnet    = "${module.network.external_subnet_output}"
+  availability_zone  = "us-east-1a" #improve
+}
 module "network" {
   source = "../../modules/network"
   availability_zone  = "us-east-1a"
