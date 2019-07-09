@@ -1,0 +1,3 @@
+instance_username = "ec2-user"
+home_ip = "73.163.104.95/32"
+vpc_id = "vpc-11882474"

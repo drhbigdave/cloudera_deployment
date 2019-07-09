@@ -1,0 +1,16 @@
+module "dev" {
+ source = "environments/dev/"
+}
+
+#module "cloudera" {
+#  cloudera_inst_count              = 1
+#  sg_count           = 1
+#  source             = "./modules/cloudera/"
+#  environment        = "dev"
+#  amis               = "ami-04681a1dbd79675a5"
+#  instance_type      = "t2.medium"
+#  availability_zone  = "us-east-1a"
+#  instance_username  = "ec2-user"
+#  path_to_privkey    = "../tf_keys/spark-mykey"
+#  path_to_pubkey     = "../tf_keys/spark-mykey.pub"
+#}
