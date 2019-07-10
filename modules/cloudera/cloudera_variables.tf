@@ -12,3 +12,4 @@ variable "path_to_pubkey" {}
 variable "sg_count" {}
 variable "subnet_pub" {}
 variable "subnet_priv" {}
+variable "redshift_cluster_endpoint" {}

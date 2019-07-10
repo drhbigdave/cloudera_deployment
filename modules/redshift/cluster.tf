@@ -37,11 +37,6 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   skip_final_snapshot = "${var.final_snap}"
 #  depends_on          = ["${aws_internet_gateway.internet_gw.id}"]
 }
-
 output "redshift_endpoint" {
-  value = "${aws_redshift_cluster.redshift_cluster.*.endpoint}"
-}
-
-data "redshift_endpoint" "redshift_endpoint_for_var" {
   value = "${aws_redshift_cluster.redshift_cluster.*.endpoint}"
 }
