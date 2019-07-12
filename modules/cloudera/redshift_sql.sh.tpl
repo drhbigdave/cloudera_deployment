@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #!/bin/bash
-mysql -u ${redshift_usr_name} -p ${redshift_secret} -h redshift_end_point <<MY_QUERY
+psql "host=${redshift_end_point} user=${redshift_usr_name} dbname=${redshift_db_name} port=${redshift_port}" <<MY_QUERY
 create database rman DEFAULT CHARACTER SET utf8;
 grant all privileges  on rman.* TO 'rman_user' IDENTIFIED BY 'rman_pwd';
 create database hivey DEFAULT CHARACTER SET utf8;

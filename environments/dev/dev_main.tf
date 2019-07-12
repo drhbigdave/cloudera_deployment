@@ -8,11 +8,14 @@ module "cloudera" {
   cloudera_worker_count = 1
   availability_zone  = "us-east-1a"
   instance_username  = "maintuser"
-  path_to_privkey    = "~/projects/tf_keys/mykey"
-  path_to_pubkey     = "~/projects/tf_keys/mykey.pub"
+  path_to_privkey    = "~/projects/tf_keys/spark-mykey"
+  path_to_pubkey     = "~/projects/tf_keys/spark-mykey.pub"
   subnet_pub    = "${module.network.external_subnet_output}"
   subnet_priv    = "${module.network.internal_subnet_output}"
   redshift_cluster_endpoint = "${module.redshift.redshift_endpoint}"
+  redshift_db_name = "${module.redshift.redshift_db_name}"
+  redshift_port = "${module.redshift.redshift_port}"
+
 }
 module "redshift" {
   count              = 1

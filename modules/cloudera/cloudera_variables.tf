@@ -13,3 +13,5 @@ variable "sg_count" {}
 variable "subnet_pub" {}
 variable "subnet_priv" {}
 variable "redshift_cluster_endpoint" {}
+variable "redshift_db_name" {}
+variable "redshift_port" {}

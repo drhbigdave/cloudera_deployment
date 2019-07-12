@@ -34,13 +34,17 @@ touch /tmp/test1
 yum install -y openscap-scanner scap-security-guide
 oscap xccdf eval --remediate --profile  standard --results scan-xccdf-results.xml /usr/share/xml/scap/ssg/content/ssg-amzn2-xccdf.xml
 
-printf "sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'">> /etc/rc.d/rc.local
-printf "sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'">> /etc/rc.d/rc.local
-printf "sysctl vm.swappiness=1">> /etc/rc.d/rc.local
-wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.41.tar.gz
-tar zxvf mysql-connector-java-5.1.41.tar.gz
-mkdir -p /usr/share/java/
-cp mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar /usr/share/java/mysql-connector-java.jar
+printf "sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'" >> /etc/rc.d/rc.local
+printf "sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'" >> /etc/rc.d/rc.local
+printf "sysctl vm.swappiness=1" >> /etc/rc.d/rc.local
+
+yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+yum install -y postgresql11
+
+#wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.41.tar.gz
+#tar zxvf mysql-connector-java-5.1.41.tar.gz
+#mkdir -p /usr/share/java/
+#cp mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar /usr/share/java/mysql-connector-java.jar
 #yum -y install -y oracle-j2sdk1.7 
 yum install -y cloudera-manager-daemons cloudera-manager-server
 yum install -y mysql

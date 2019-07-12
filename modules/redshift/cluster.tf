@@ -22,7 +22,7 @@ output "redshift_role" {
 }
 
 resource "aws_redshift_cluster" "redshift_cluster" {
-  count              = "${var.count}"
+#  count              = "${var.count}" #use of requires splat notation, makes a list
   cluster_identifier = "${var.cluster_name}"
   database_name      = "${var.db_name}"
   master_username    = "${data.aws_ssm_parameter.db_master.value}"
@@ -38,5 +38,11 @@ resource "aws_redshift_cluster" "redshift_cluster" {
 #  depends_on          = ["${aws_internet_gateway.internet_gw.id}"]
 }
 output "redshift_endpoint" {
-  value = "${aws_redshift_cluster.redshift_cluster.*.endpoint}"
+  value = "${aws_redshift_cluster.redshift_cluster.endpoint}"
+}
+output "redshift_db_name" {
+  value = "${aws_redshift_cluster.redshift_cluster.database_name}"
+}
+output "redshift_port" {
+  value ="${aws_redshift_cluster.redshift_cluster.port}"
 }
