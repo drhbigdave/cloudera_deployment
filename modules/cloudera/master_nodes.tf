@@ -85,7 +85,7 @@ resource "aws_instance" "cloudera_master" {
     ]
   }
   provisioner "file" {
-    source      = "${data.template_file.sql_script.rendered}"
+    content      = "${data.template_file.sql_script.rendered}"
     destination = "/home/maintuser/redshift_sql.sh"
   }
   provisioner "remote-exec" {
