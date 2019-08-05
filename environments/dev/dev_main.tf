@@ -3,10 +3,11 @@ module "cloudera" {
   source             = "../../modules/cloudera/"
   environment        = "dev"
   amis               = "ami-0574062183ccc507a"
-  cloudera_inst_type      = "c5d.large"
+  master_inst_type  = "c5d.large"
+  worker_inst_type  = "m5ad.large"
   cloudera_master_count = 1
   cloudera_worker_count = 1
-  availability_zone  = "us-east-1a"
+  availability_zone  = "us-east-1f"
   instance_username  = "maintuser"
   path_to_privkey    = "~/projects/tf_keys/spark-mykey"
   path_to_pubkey     = "~/projects/tf_keys/spark-mykey.pub"
@@ -31,10 +32,11 @@ module "redshift" {
   final_snap         = true
   subnet    = "${module.network.external_subnet_output}"
   availability_zone  = "us-east-1a" #improve
+  master_sg = "${module.cloudera.cloudera_sg_priv_output}"
 }
 module "network" {
   source = "../../modules/network"
-  availability_zone  = "us-east-1a"
+  availability_zone  = "us-east-1f"
 }
 output "endpoint_var" {
   value = "substr(${module.redshift.redshift_endpoint},0, -5)"

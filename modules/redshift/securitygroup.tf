@@ -20,7 +20,7 @@ resource "aws_security_group" "redshift" {
  description = "for redshift cluster all allow home ip"
  vpc_id      = "${data.aws_ssm_parameter.vpc_id.value}"
  tags = {
-    Name = "data-science"
+    Name = "redshift_sg"
   }
 
   ingress {
@@ -28,6 +28,7 @@ resource "aws_security_group" "redshift" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["${data.aws_ssm_parameter.home_ip.value}"]
+    security_groups = ["${var.master_sg}"]
     self = true
   }
 

@@ -27,9 +27,8 @@ resource "aws_placement_group" "cloudera" {
 output "placement_group_output" {
    value = "${aws_placement_group.cloudera.id}"
 }
-
-data "template_file" "sql_script" {
-  template = "${file("${path.module}/redshift_sql.sh.tpl")}"
+data "template_file" "pgpass_file" {
+  template = "${file("${path.module}/redshift_pgpass.tpl")}"
   vars {
     redshift_usr_name = "${data.aws_ssm_parameter.db_master.value}"
     redshift_secret = "${data.aws_ssm_parameter.db_pw.value}"
@@ -39,9 +38,19 @@ data "template_file" "sql_script" {
   }
 }
 
+data "template_file" "sql_script" {
+  template = "${file("${path.module}/redshift_sql.sh.tpl")}"
+  vars {
+    redshift_usr_name = "${data.aws_ssm_parameter.db_master.value}"
+    redshift_end_point = "${var.redshift_cluster_endpoint}"
+    redshift_db_name = "${var.redshift_db_name}"
+    redshift_port = "${var.redshift_port}"
+  }
+}
+
 resource "aws_instance" "cloudera_master" {
   ami = "${var.amis}"
-  instance_type = "${var.cloudera_inst_type}"
+  instance_type = "${var.master_inst_type}"
   availability_zone = "${var.availability_zone}"
   count = "${var.cloudera_master_count}"
   subnet_id = "${var.subnet_pub}"
@@ -83,6 +92,15 @@ resource "aws_instance" "cloudera_master" {
       "sudo chmod +x ~/script_master.sh",
       "sudo /home/maintuser/script_master.sh"
     ]
+  }
+  provisioner "file" {
+    content      = "${data.template_file.pgpass_file.rendered}"
+    destination = "/home/maintuser/.pgpass"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod 0600 /home/maintuser/.pgpass"
+      ]
   }
   provisioner "file" {
     content      = "${data.template_file.sql_script.rendered}"

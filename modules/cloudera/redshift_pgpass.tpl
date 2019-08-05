@@ -1,0 +1,1 @@
+${redshift_end_point}:${redshift_port}:${redshift_db_name}:${redshift_usr_name}:${redshift_secret}

@@ -7,7 +7,7 @@ output "cloudera_worker_output" {
 
 resource "aws_instance" "cloudera_worker" {
   ami = "${var.amis}"
-  instance_type = "${var.cloudera_inst_type}"
+  instance_type = "${var.worker_inst_type}"
   availability_zone = "${var.availability_zone}"
   count = "${var.cloudera_worker_count}"
 #  depends_on = ["${aws_internet_gateway.internet_gw.id}"]

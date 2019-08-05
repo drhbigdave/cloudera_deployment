@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #!/bin/bash
-psql -h redshift1.ccmwpu7us3rn.us-east-1.redshift.amazonaws.com -U redshift -d redshiftdb -p 5439 <<MY_QUERY
+mysql -u ${redshift_usr_name} -p ${redshift_secret} -h redshift_end_point <<MY_QUERY
 create database rman DEFAULT CHARACTER SET utf8;
 grant all privileges  on rman.* TO 'rman_user' IDENTIFIED BY 'rman_pwd';
 create database hivey DEFAULT CHARACTER SET utf8;
@@ -19,8 +19,3 @@ grant all privileges  on `%`.* TO 'temp'@'%' IDENTIFIED BY 'temp';
 Flush privileges;
 exit
 MY_QUERY
-
-
-#psql -h redshift1.ccmwpu7us3rn.us-east-1.redshift.amazonaws.com -U redshift -d redshiftdb -p 5439
-#redshift1.ccmwpu7us3rn.us-east-1.redshift.amazonaws.com:5439:redshiftdb:redshift:
-#psql "host=${redshift_end_point} user=${redshift_usr_name} dbname=${redshift_db_name} port=${redshift_port}"

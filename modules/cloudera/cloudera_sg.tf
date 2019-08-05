@@ -36,7 +36,7 @@ resource "aws_security_group" "cloudera_sg_pub" {
   }
 }
 resource "aws_security_group" "cloudera_sg_priv" {
-  count       = "${var.sg_count}"
+#  count       = "${var.sg_count}"
   name        = "cloudera_sg"
   description = "for intra-VPC cloudera traffic"
   vpc_id      = "${data.aws_ssm_parameter.vpc_id.value}"
@@ -57,3 +57,8 @@ resource "aws_security_group" "cloudera_sg_priv" {
     self            = true
   }
 }
+output "cloudera_sg_priv_output" {
+   value = "${aws_security_group.cloudera_sg_priv.id}"
+}
+
+
