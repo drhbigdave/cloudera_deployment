@@ -16,7 +16,7 @@ module "cloudera" {
   redshift_db_name = "${module.redshift.redshift_db_name}"
   redshift_port = "${module.redshift.redshift_port}"
 }
-module "redshift" {
+module "rds" {
   count              = 1
   sg_count           = 1
   source             = "../../modules/redshift/"
