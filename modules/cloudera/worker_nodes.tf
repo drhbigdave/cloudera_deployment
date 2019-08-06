@@ -43,7 +43,7 @@ resource "aws_instance" "cloudera_worker" {
         yum install -y openscap-scanner scap-security-guide
         oscap xccdf eval --remediate --profile  standard --results scan-xccdf-results.xml /usr/share/xml/scap/ssg/content/ssg-amzn2-xccdf.xml
         yum install -y java-1.8.0-openjdk
-        wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm    
+        wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
         yum install -y ./epel-release-latest-*.noarch.rpm
         curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         python get-pip.py

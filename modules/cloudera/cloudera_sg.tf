@@ -35,6 +35,9 @@ resource "aws_security_group" "cloudera_sg_pub" {
     cidr_blocks     = ["0.0.0.0/0"]
   }
 }
+output "cloudera_sg_pub_id_output" {
+   value = "${aws_security_group.cloudera_sg_pub.id}"
+}
 resource "aws_security_group" "cloudera_sg_priv" {
   count       = "${var.sg_count}"
   name        = "cloudera_sg"
@@ -56,4 +59,7 @@ resource "aws_security_group" "cloudera_sg_priv" {
     cidr_blocks     = ["0.0.0.0/0"]
     self            = true
   }
+}
+output "cloudera_sg_priv_id_output" {
+   value = "${aws_security_group.cloudera_sg_priv.id}"
 }

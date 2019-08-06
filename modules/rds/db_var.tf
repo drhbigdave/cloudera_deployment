@@ -1,0 +1,10 @@
+variable "rds_instance_identifier" {}
+variable "allocated_storage" {}
+variable "storage_type" {}
+variable "engine" {}
+variable "engine_version" {}
+variable "instance_class" {}
+variable "db_name" {}
+variable "rds_subnet_group_name" {}
+variable "rds_subnet_1" {}
+variable "rds_subnet_2" {}

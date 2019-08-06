@@ -12,30 +12,30 @@ module "cloudera" {
   path_to_pubkey     = "~/projects/tf_keys/spark-mykey.pub"
   subnet_pub    = "${module.network.external_subnet_output}"
   subnet_priv    = "${module.network.internal_subnet_output}"
-  redshift_cluster_endpoint = "${element(split(":", module.redshift.redshift_endpoint),0)}"
-  redshift_db_name = "${module.redshift.redshift_db_name}"
-  redshift_port = "${module.redshift.redshift_port}"
+#  redshift_cluster_endpoint = "${element(split(":", module.redshift.redshift_endpoint),0)}"
+#  redshift_db_name = "${module.rds.redshift_db_name}"
+#  redshift_port = "${module.redshift.redshift_port}"
 }
 module "rds" {
-  count              = 1
-  sg_count           = 1
-  source             = "../../modules/redshift/"
-  cluster_name       = "redshift1"
-  db_name            = "redshiftdb"
-  node_type          = "dc2.large"
-  cluster_type       = "multi-node"
-  nodes              = 2
-  subnet_group_name  = "group1"
-  enhanced           = true
-  iam_roles          = "udemy_pipeline"
-  final_snap         = true
-  subnet    = "${module.network.external_subnet_output}"
-  availability_zone  = "us-east-1a" #improve
+  source             = "../../modules/rds/"
+  allocated_storage  = "20"
+  storage_type       = "gp2"
+  engine             = "mysql"
+  engine_version     = "5.6.35"
+  instance_class     = "db.t3.medium"
+  db_name            = "cloudera_cdh"
+  rds_subnet_group_name = "cloudera_subnet_group"
+  rds_instance_identifier = "cloudera_rds"
+  rds_subnet_1 = "${module.network.internal_rds_subnet_1_output}"
+  rds_subnet_2 = "${module.network.internal_rds_subnet_2_output}"
+  pub_sg              = "${module.cloudera.cloudera_sg_pub_id_output}"
+  priv_sg             = "${module.cloudera.cloudera_sg_priv_id_output}"
 }
 module "network" {
   source = "../../modules/network"
-  availability_zone  = "us-east-1a"
+  availability_zone_1  = "us-east-1a"
+  availability_zone_2  = "us-east-1f"
 }
 output "endpoint_var" {
-  value = "substr(${module.redshift.redshift_endpoint},0, -5)"
+  value = "substr(${module.rds.rds_endpoint},0, -5)"
 }
