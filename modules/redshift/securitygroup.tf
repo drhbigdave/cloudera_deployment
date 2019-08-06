@@ -27,7 +27,7 @@ resource "aws_security_group" "redshift" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["${data.aws_ssm_parameter.home_ip.value}"]
+    cidr_blocks = ["${data.aws_ssm_parameter.home_ip.value}"] #you have to add the master sg, remove home ip
     self = true
   }
 
