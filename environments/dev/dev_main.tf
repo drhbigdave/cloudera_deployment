@@ -12,6 +12,8 @@ module "cloudera" {
   path_to_pubkey     = "~/projects/tf_keys/spark-mykey.pub"
   subnet_pub    = "${module.network.external_subnet_output}"
   subnet_priv    = "${module.network.internal_subnet_output}"
+  cloudera_pub_sg_name_tag = "cloudera_pub"
+  cloudera_priv_sg_name_tag = "cloudera_priv"
 #  redshift_cluster_endpoint = "${element(split(":", module.redshift.redshift_endpoint),0)}"
 #  redshift_db_name = "${module.rds.redshift_db_name}"
 #  redshift_port = "${module.redshift.redshift_port}"
@@ -25,11 +27,13 @@ module "rds" {
   instance_class     = "db.t3.medium"
   db_name            = "cloudera_cdh"
   rds_subnet_group_name = "cloudera_subnet_group"
-  rds_instance_identifier = "cloudera_rds"
+  rds_instance_identifier = "cloudera-rds"
   rds_subnet_1 = "${module.network.internal_rds_subnet_1_output}"
   rds_subnet_2 = "${module.network.internal_rds_subnet_2_output}"
   pub_sg              = "${module.cloudera.cloudera_sg_pub_id_output}"
   priv_sg             = "${module.cloudera.cloudera_sg_priv_id_output}"
+  rds_sg_name_tag     = "rds_instance_sg"
+  skip_final_snapshot_bool = true
 }
 module "network" {
   source = "../../modules/network"

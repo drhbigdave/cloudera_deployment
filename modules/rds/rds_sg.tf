@@ -12,7 +12,7 @@ resource "aws_security_group" "rds1" {
   vpc_id      = "${data.aws_ssm_parameter.vpc_id.value}"
 
   ingress {
-    from_port   = 0
+    from_port   = 3306
     to_port     = 3306
     protocol    = "TCP"
     security_groups = [
@@ -29,6 +29,6 @@ resource "aws_security_group" "rds1" {
   }
 
   tags = {
-    Name = "RDS SG"
+    Name = "${var.rds_sg_name_tag}"
   }
 }

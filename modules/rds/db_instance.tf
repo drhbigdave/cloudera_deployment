@@ -25,6 +25,7 @@ resource "aws_db_instance" "cloudera_cdh_db" {
   password               = "${data.aws_ssm_parameter.db_pw.value}"
   vpc_security_group_ids = ["${aws_security_group.rds1.id}"]
   db_subnet_group_name   = "${aws_db_subnet_group.subnet_group_1.id}"
+  skip_final_snapshot    = "${var.skip_final_snapshot_bool}"
 }
 
 resource "aws_db_subnet_group" "subnet_group_1" {

@@ -15,7 +15,6 @@ output "vpc_string" {
 }
 
 resource "aws_security_group" "cloudera_sg_pub" {
-  count       = "${var.sg_count}"
   name        = "home_ip_cloudera_sg"
   description = "hadoop home IP all traffic allow"
   vpc_id      = "${data.aws_ssm_parameter.vpc_id.value}"
@@ -34,13 +33,15 @@ resource "aws_security_group" "cloudera_sg_pub" {
     protocol        = "-1"
     cidr_blocks     = ["0.0.0.0/0"]
   }
+  tags = {
+    Name = "${var.cloudera_pub_sg_name_tag}"
+  }
 }
 output "cloudera_sg_pub_id_output" {
    value = "${aws_security_group.cloudera_sg_pub.id}"
 }
 resource "aws_security_group" "cloudera_sg_priv" {
-  count       = "${var.sg_count}"
-  name        = "cloudera_sg"
+  name        = "internal_cloudera_sg"
   description = "for intra-VPC cloudera traffic"
   vpc_id      = "${data.aws_ssm_parameter.vpc_id.value}"
 
@@ -58,6 +59,9 @@ resource "aws_security_group" "cloudera_sg_priv" {
     protocol        = "-1"
     cidr_blocks     = ["0.0.0.0/0"]
     self            = true
+  }
+  tags = {
+    Name = "${var.cloudera_priv_sg_name_tag}"
   }
 }
 output "cloudera_sg_priv_id_output" {

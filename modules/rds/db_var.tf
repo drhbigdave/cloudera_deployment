@@ -8,3 +8,4 @@ variable "db_name" {}
 variable "rds_subnet_group_name" {}
 variable "rds_subnet_1" {}
 variable "rds_subnet_2" {}
+variable "skip_final_snapshot_bool" {}
