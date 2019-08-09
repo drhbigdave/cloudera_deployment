@@ -3,7 +3,8 @@ module "cloudera" {
   source             = "../../modules/cloudera/"
   environment        = "dev"
   amis               = "ami-0574062183ccc507a"
-  cloudera_inst_type      = "c5d.large"
+  cloudera_master_inst_type = "t3a.large"
+  cloudera_worker_inst_type = "t3a.large"
   cloudera_master_count = 1
   cloudera_worker_count = 1
   availability_zone  = "us-east-1a"

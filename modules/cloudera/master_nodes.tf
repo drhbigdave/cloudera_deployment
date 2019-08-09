@@ -20,13 +20,13 @@ output "cloudera_master_output" {
    value = "${data.aws_iam_instance_profile.cloudera_master.name}"
 }
 
-resource "aws_placement_group" "cloudera" {
-  name     = "cloudera-pg"
-  strategy = "cluster"
-}
-output "placement_group_output" {
-   value = "${aws_placement_group.cloudera.id}"
-}
+#resource "aws_placement_group" "cloudera" {
+#  name     = "cloudera-pg"
+#  strategy = "cluster"
+#}
+#output "placement_group_output" {
+#   value = "${aws_placement_group.cloudera.id}"
+#}
 
 #data "template_file" "sql_script" {
 #  template = "${file("${path.module}/redshift_sql.sh.tpl")}"
@@ -41,21 +41,22 @@ output "placement_group_output" {
 
 resource "aws_instance" "cloudera_master" {
   ami = "${var.amis}"
-  instance_type = "${var.cloudera_inst_type}"
+  instance_type = "${var.cloudera_master_inst_type}"
   availability_zone = "${var.availability_zone}"
   count = "${var.cloudera_master_count}"
   subnet_id = "${var.subnet_pub}"
   associate_public_ip_address = true
-  placement_group = "${aws_placement_group.cloudera.id}"
-  ephemeral_block_device {
-    device_name = "/dev/sde",
-    virtual_name = "ephemeral0"
-  }
+#  placement_group = "${aws_placement_group.cloudera.id}"
 # leaving this here in case the need for non-ephemeral comes up
-#  ebs_block_device {
-#   volume_size    = 20,
-#    device_name    = "/dev/sdf"
+#  ephemeral_block_device {
+#    device_name = "/dev/sde",
+#    virtual_name = "ephemeral0"
 #  }
+# leaving this here in case the need for non-ephemeral comes up
+  ebs_block_device {
+   volume_size    = 20,
+    device_name    = "/dev/sdf"
+  }
   tags {
     Name = "cloudera_master${count.index}"
   }

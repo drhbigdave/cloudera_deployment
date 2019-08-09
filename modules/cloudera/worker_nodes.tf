@@ -7,22 +7,23 @@ output "cloudera_worker_output" {
 
 resource "aws_instance" "cloudera_worker" {
   ami = "${var.amis}"
-  instance_type = "${var.cloudera_inst_type}"
+  instance_type = "${var.cloudera_worker_inst_type}"
   availability_zone = "${var.availability_zone}"
   count = "${var.cloudera_worker_count}"
 #  depends_on = ["${aws_internet_gateway.internet_gw.id}"]
   subnet_id = "${var.subnet_priv}"
   associate_public_ip_address = false
-  placement_group = "${aws_placement_group.cloudera.id}"
-  ephemeral_block_device {
-    device_name = "/dev/sde",
-    virtual_name = "ephemeral0"
-  }
-# leaving this here in case the need for non-ephemeral comes up
-#  ebs_block_device {
-#   volume_size    = 20,
-#    device_name    = "/dev/sdf"
+#  placement_group = "${aws_placement_group.cloudera.id}"
+# leaving this here in case the need for ephemeral comes up
+#  ephemeral_block_device {
+#    device_name = "/dev/sde",
+#    virtual_name = "ephemeral0"
 #  }
+# leaving this here in case the need for non-ephemeral comes up
+  ebs_block_device {
+   volume_size    = 20,
+    device_name    = "/dev/sdf"
+  }
   tags {
     Name = "cloudera_worker${count.index}"
   }
