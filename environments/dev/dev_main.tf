@@ -3,11 +3,11 @@ module "cloudera" {
   source             = "../../modules/cloudera/"
   environment        = "dev"
   amis               = "ami-0574062183ccc507a"
-  cloudera_master_inst_type = "t3a.large"
-  cloudera_worker_inst_type = "t3a.large"
+  cloudera_master_inst_type = "c5d.large"
+  cloudera_worker_inst_type = "r5ad.large"
   cloudera_master_count = 1
   cloudera_worker_count = 1
-  availability_zone  = "us-east-1a"
+  availability_zone  = "us-east-1f" #az for all cloudera resources, 1f required for r5ad inst type
   instance_username  = "maintuser"
   path_to_privkey    = "~/projects/tf_keys/spark-mykey"
   path_to_pubkey     = "~/projects/tf_keys/spark-mykey.pub"
@@ -15,9 +15,10 @@ module "cloudera" {
   subnet_priv    = "${module.network.internal_subnet_output}"
   cloudera_pub_sg_name_tag = "cloudera_pub"
   cloudera_priv_sg_name_tag = "cloudera_priv"
-#  redshift_cluster_endpoint = "${element(split(":", module.redshift.redshift_endpoint),0)}"
-#  redshift_db_name = "${module.rds.redshift_db_name}"
-#  redshift_port = "${module.redshift.redshift_port}"
+#  rds_cluster_endpoint = "${element(split(":", module.rds.rds_endpoint),0)}"
+  rds_address = "${module.rds.rds_address}"
+  rds_db_name = "${module.rds.rds_db_name}"
+  rds_port = "${module.rds.rds_port}"
 }
 module "rds" {
   source             = "../../modules/rds/"
@@ -38,9 +39,9 @@ module "rds" {
 }
 module "network" {
   source = "../../modules/network"
-  availability_zone_1  = "us-east-1a"
-  availability_zone_2  = "us-east-1f"
+  availability_zone_1  = "us-east-1f" #az all used resources in
+  availability_zone_2  = "us-east-1a" #az for rds replica
 }
-output "endpoint_var" {
-  value = "substr(${module.rds.rds_endpoint},0, -5)"
-}
+#output "endpoint_var" {
+#  value = "substr(${module.rds.rds_endpoint},0, -5)"
+#}

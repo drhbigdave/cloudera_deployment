@@ -13,20 +13,20 @@ resource "aws_instance" "cloudera_worker" {
 #  depends_on = ["${aws_internet_gateway.internet_gw.id}"]
   subnet_id = "${var.subnet_priv}"
   associate_public_ip_address = false
-#  placement_group = "${aws_placement_group.cloudera.id}"
+  placement_group = "${aws_placement_group.cloudera.id}"
 # leaving this here in case the need for ephemeral comes up
-#  ephemeral_block_device {
-#    device_name = "/dev/sde",
-#    virtual_name = "ephemeral0"
-#  }
+  ephemeral_block_device {
+    device_name = "/dev/sde",
+    virtual_name = "ephemeral0"
+  }
 # leaving this here in case the need for non-ephemeral comes up
-  ebs_block_device {
-   volume_size    = 20,
-    device_name    = "/dev/sdf"
-  }
-  tags {
-    Name = "cloudera_worker${count.index}"
-  }
+#  ebs_block_device {
+#   volume_size    = 20,
+#    device_name    = "/dev/sdf"
+#  }
+#  tags {
+#    Name = "cloudera_worker${count.index}"
+#  }
 
   #ssh key
   key_name = "${aws_key_pair.mykey.key_name}"

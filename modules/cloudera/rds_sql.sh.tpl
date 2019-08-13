@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #!/bin/bash
-psql "host=${redshift_end_point} user=${redshift_usr_name} dbname=${redshift_db_name} port=${redshift_port}" <<MY_QUERY
+mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret} ${rds_db_name} <<MY_QUERY
 create database rman DEFAULT CHARACTER SET utf8;
 grant all privileges  on rman.* TO 'rman_user' IDENTIFIED BY 'rman_pwd';
 create database hivey DEFAULT CHARACTER SET utf8;
@@ -19,3 +19,5 @@ grant all privileges  on `%`.* TO 'temp'@'%' IDENTIFIED BY 'temp';
 Flush privileges;
 exit
 MY_QUERY
+#psql "host=cloudera-rds.cznlqqqj7fdq.us-east-1.rds.amazonaws.com user=redshift dbname=cloudera_cdh port=3306"
+#mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret} ${rds_db_name}

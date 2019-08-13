@@ -31,7 +31,7 @@ resource "aws_subnet" "external" {
   }
 }
 
-resource "aws_route_table" "us-east-1a-public" {
+resource "aws_route_table" "us-east-public" {
     vpc_id = "${data.aws_ssm_parameter.vpc_id.value}"
 
     route {
@@ -44,12 +44,12 @@ resource "aws_route_table" "us-east-1a-public" {
     }
 }
 
-resource "aws_route_table_association" "us-east-1a-public" {
+resource "aws_route_table_association" "us-east-public" {
     subnet_id = "${aws_subnet.external.id}"
-    route_table_id = "${aws_route_table.us-east-1a-public.id}"
+    route_table_id = "${aws_route_table.us-east-public.id}"
 }
 resource "aws_vpc_endpoint_route_table_association" "external" {
-    route_table_id  = "${aws_route_table.us-east-1a-public.id}"
+    route_table_id  = "${aws_route_table.us-east-public.id}"
     vpc_endpoint_id = "${aws_vpc_endpoint.s3.id}"
 }
 

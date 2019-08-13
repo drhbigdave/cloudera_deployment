@@ -11,7 +11,7 @@ sudo yum update -y
 sudo yum install -y java-1.8.0-openjdk
 
 #yum install -y wget
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm    
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 yum install -y ./epel-release-latest-*.noarch.rpm
 curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 sudo python get-pip.py
@@ -38,14 +38,14 @@ printf "sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'" >> /et
 printf "sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'" >> /etc/rc.d/rc.local
 printf "sysctl vm.swappiness=1" >> /etc/rc.d/rc.local
 
-yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-yum install -y postgresql11
+# at one point had installed psql for use with Redshift
+#yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+#yum install -y postgresql11
 
-#wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.41.tar.gz
-#tar zxvf mysql-connector-java-5.1.41.tar.gz
-#mkdir -p /usr/share/java/
-#cp mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar /usr/share/java/mysql-connector-java.jar
-#yum -y install -y oracle-j2sdk1.7 
+wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.41.tar.gz
+tar zxvf mysql-connector-java-5.1.41.tar.gz
+mkdir -p /usr/share/java/
+cp mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar /usr/share/java/mysql-connector-java.jar
+yum -y install -y oracle-j2sdk1.7
 yum install -y cloudera-manager-daemons cloudera-manager-server
 yum install -y mysql
-

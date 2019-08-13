@@ -20,24 +20,24 @@ output "cloudera_master_output" {
    value = "${data.aws_iam_instance_profile.cloudera_master.name}"
 }
 
-#resource "aws_placement_group" "cloudera" {
-#  name     = "cloudera-pg"
-#  strategy = "cluster"
-#}
-#output "placement_group_output" {
-#   value = "${aws_placement_group.cloudera.id}"
-#}
+resource "aws_placement_group" "cloudera" {
+  name     = "cloudera-pg"
+  strategy = "cluster"
+}
+output "placement_group_output" {
+   value = "${aws_placement_group.cloudera.id}"
+}
 
-#data "template_file" "sql_script" {
-#  template = "${file("${path.module}/redshift_sql.sh.tpl")}"
-#  vars {
-#    redshift_usr_name = "${data.aws_ssm_parameter.db_master.value}"
-#    redshift_secret = "${data.aws_ssm_parameter.db_pw.value}"
-#    redshift_end_point = "${var.redshift_cluster_endpoint}"
-#    redshift_db_name = "${var.redshift_db_name}"
-#    redshift_port = "${var.redshift_port}"
-#  }
-#}
+data "template_file" "sql_script" {
+  template = "${file("${path.module}/rds_sql.sh.tpl")}"
+  vars {
+    redshift_usr_name = "${data.aws_ssm_parameter.db_master.value}"
+    redshift_secret = "${data.aws_ssm_parameter.db_pw.value}"
+    rds_address = "${var.rds_address}"
+    rds_db_name = "${var.rds_db_name}"
+    rds_port = "${var.rds_port}"
+  }
+}
 
 resource "aws_instance" "cloudera_master" {
   ami = "${var.amis}"
@@ -46,20 +46,20 @@ resource "aws_instance" "cloudera_master" {
   count = "${var.cloudera_master_count}"
   subnet_id = "${var.subnet_pub}"
   associate_public_ip_address = true
-#  placement_group = "${aws_placement_group.cloudera.id}"
+  placement_group = "${aws_placement_group.cloudera.id}"
 # leaving this here in case the need for non-ephemeral comes up
-#  ephemeral_block_device {
-#    device_name = "/dev/sde",
-#    virtual_name = "ephemeral0"
+  ephemeral_block_device {
+    device_name = "/dev/sde",
+    virtual_name = "ephemeral0"
+  }
+# leaving this here in case the need for non-ephemeral comes up
+#  ebs_block_device {
+#   volume_size    = 20,
+#    device_name    = "/dev/sdf"
 #  }
-# leaving this here in case the need for non-ephemeral comes up
-  ebs_block_device {
-   volume_size    = 20,
-    device_name    = "/dev/sdf"
-  }
-  tags {
-    Name = "cloudera_master${count.index}"
-  }
+#  tags {
+#    Name = "cloudera_master${count.index}"
+#  }
 
   #ssh key
   key_name = "${aws_key_pair.mykey.key_name}"
@@ -85,16 +85,16 @@ resource "aws_instance" "cloudera_master" {
       "sudo /home/maintuser/script_master.sh"
     ]
   }
-#  provisioner "file" {
-#    content      = "${data.template_file.sql_script.rendered}"
-#    destination = "/home/maintuser/redshift_sql.sh"
-#  }
-#  provisioner "remote-exec" {
-#    inline = [
-#      "sudo chmod +x /home/maintuser/redshift_sql.sh",
-#      "sudo /home/maintuser/redshift_sql.sh"
-#      ]
-#  }
+  provisioner "file" {
+    content      = "${data.template_file.sql_script.rendered}"
+    destination = "/home/maintuser/rds_sql.sh"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /home/maintuser/rds_sql.sh",
+      "sudo /home/maintuser/rds_sql.sh"
+      ]
+  }
 
 #  provisioner "file" {
 #    source = "${path.module}/script1.sh"

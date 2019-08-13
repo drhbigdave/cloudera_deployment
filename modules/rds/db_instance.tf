@@ -33,6 +33,15 @@ resource "aws_db_subnet_group" "subnet_group_1" {
   description = "cloudera group of subnets"
   subnet_ids  = ["${var.rds_subnet_1}", "${var.rds_subnet_2}"]
 }
-output "rds_endpoint" {
-  value = "${aws_db_instance.cloudera_cdh_db.endpoint}"
+output "rds_db_name" {
+  value = "${aws_db_instance.cloudera_cdh_db.name}"
+}
+#output "rds_endpoint" {
+#  value = "${aws_db_instance.cloudera_cdh_db.endpoint}"
+#}
+output "rds_port" {
+  value = "${aws_db_instance.cloudera_cdh_db.port}"
+}
+output "rds_address" {
+  value = "${aws_db_instance.cloudera_cdh_db.address}"
 }
