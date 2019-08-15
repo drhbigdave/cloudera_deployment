@@ -11,7 +11,7 @@ sudo yum update -y
 sudo yum install -y java-1.8.0-openjdk
 
 #yum install -y wget
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm    
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 yum install -y ./epel-release-latest-*.noarch.rpm
 curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 sudo python get-pip.py
@@ -30,5 +30,5 @@ mkdir /usr/local/cloudera
 printf "/dev/mapper/VolGroup01-cloudera /usr/local/cloudera  ext4    defaults        0 0" >> /etc/fstab
 mount -a
 touch /tmp/test1
-
+wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/
 yum install -y cloudera-manager-daemons cloudera-manager-server

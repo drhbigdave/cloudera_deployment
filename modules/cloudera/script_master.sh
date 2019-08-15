@@ -47,5 +47,6 @@ tar zxvf mysql-connector-java-5.1.41.tar.gz
 mkdir -p /usr/share/java/
 cp mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar /usr/share/java/mysql-connector-java.jar
 yum -y install -y oracle-j2sdk1.7
+wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/
 yum install -y cloudera-manager-daemons cloudera-manager-server
 yum install -y mysql

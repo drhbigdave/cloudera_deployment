@@ -19,6 +19,9 @@ module "cloudera" {
   rds_address = "${module.rds.rds_address}"
   rds_db_name = "${module.rds.rds_db_name}"
   rds_port = "${module.rds.rds_port}"
+#  worker_private_dns = "${module.cloudera.master_private_dns_fqdn}"
+#master_internal_dns = "${aws_instance.cloudera_master.private_dns}"
+#--scm-host ${master_internal_dns}
 }
 module "rds" {
   source             = "../../modules/rds/"

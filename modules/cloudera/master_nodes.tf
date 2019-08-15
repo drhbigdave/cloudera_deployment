@@ -128,3 +128,6 @@ resource "aws_instance" "cloudera_master" {
     private_key = "${file("${var.path_to_privkey}")}"
   }
 }
+#output "master_private_dns_fqdn" {
+#   value = "${aws_instance.cloudera_master.private_dns}"
+#}

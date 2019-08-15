@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #!/bin/bash
-mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret} ${rds_db_name} <<MY_QUERY
+mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret} <<MY_QUERY
 create database rman DEFAULT CHARACTER SET utf8;
 grant all privileges  on rman.* TO 'rman_user' IDENTIFIED BY 'rman_pwd';
 create database hivey DEFAULT CHARACTER SET utf8;
@@ -21,3 +21,5 @@ exit
 MY_QUERY
 #psql "host=cloudera-rds.cznlqqqj7fdq.us-east-1.rds.amazonaws.com user=redshift dbname=cloudera_cdh port=3306"
 #mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret} ${rds_db_name}
+
+sudo /usr/share/cmf/schema/scm_prepare_database.sh mysql -h ${rds_address} -u temp -ptemp --scm-host  scm scm_user scm_pwd
