@@ -1,6 +1,6 @@
 module "cloudera" {
   sg_count           = 1
-  source             = "../../modules/cloudera/"
+  source             = "../../modules/rds_ec2_eph/cloudera/"
   environment        = "dev"
   amis               = "ami-0574062183ccc507a"
   cloudera_master_inst_type = "c5d.large"
@@ -24,7 +24,7 @@ module "cloudera" {
 #--scm-host ${master_internal_dns}
 }
 module "rds" {
-  source             = "../../modules/rds/"
+  source             = "../../modules/rds_ec2_eph/rds/"
   allocated_storage  = "20"
   storage_type       = "gp2"
   engine             = "mysql"
@@ -41,10 +41,12 @@ module "rds" {
   skip_final_snapshot_bool = true
 }
 module "network" {
-  source = "../../modules/network"
+  source = "../../modules/rds_ec2_eph/network"
   availability_zone_1  = "us-east-1f" #az all used resources in
   availability_zone_2  = "us-east-1a" #az for rds replica
 }
+# this below is prob still here as it was a victory to figure it out with Redshift
+# but then RDS didn't need it as it has the URI by itself
 #output "endpoint_var" {
 #  value = "substr(${module.rds.rds_endpoint},0, -5)"
 #}
