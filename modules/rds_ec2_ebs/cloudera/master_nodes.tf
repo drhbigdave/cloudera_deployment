@@ -19,7 +19,7 @@ data "aws_iam_instance_profile" "cloudera_master" {
 output "cloudera_master_output" {
    value = "${data.aws_iam_instance_profile.cloudera_master.name}"
 }
-
+# placement groups didn't work with the instance type chosen
 #resource "aws_placement_group" "cloudera" {
 #  name     = "cloudera-pg"
 #  strategy = "cluster"

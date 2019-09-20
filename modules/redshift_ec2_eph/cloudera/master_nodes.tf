@@ -114,31 +114,10 @@ resource "aws_instance" "cloudera_master" {
   }
 
 #  provisioner "file" {
-#    source = "${path.module}/script1.sh"
-#    destination = "~/script1.sh"
-#  }
-#  provisioner "remote-exec" {
-#    inline = [
-#      "sudo chmod +x ~/script1.sh",
-#      "sudo ~/script1.sh"
-#    ]
-#  }
-
-#  provisioner "file" {
 #    source = "jupyter_notebook_config.py"
 #    destination = "~/.jupyter/jupyter_notebook_config.py"
 #  }
-#
-#  provisioner "file" {
-#    source = "scripts/script2.sh"
-#    destination = "~/script2.sh"
-#  }
-#  provisioner "remote-exec" {
-#    inline = [
-#      "chmod +x ~/script2.sh",
-#      "~/script2.sh"
-#    ]
-#  }
+
 
   connection {
     user = "${var.instance_username}"

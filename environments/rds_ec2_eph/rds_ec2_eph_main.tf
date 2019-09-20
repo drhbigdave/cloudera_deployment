@@ -5,8 +5,8 @@ module "cloudera" {
   amis               = "ami-0574062183ccc507a"
   cloudera_master_inst_type = "c5d.large"
   cloudera_worker_inst_type = "r5ad.large"
-  cloudera_master_count = 1
-  cloudera_worker_count = 1
+  cloudera_master_count = 2
+  cloudera_worker_count = 2
   availability_zone  = "us-east-1f" #az for all cloudera resources, 1f required for r5ad inst type
   instance_username  = "maintuser"
   path_to_privkey    = "~/projects/tf_keys/spark-mykey"
@@ -20,8 +20,7 @@ module "cloudera" {
   rds_db_name = "${module.rds.rds_db_name}"
   rds_port = "${module.rds.rds_port}"
 #  worker_private_dns = "${module.cloudera.master_private_dns_fqdn}"
-#master_internal_dns = "${aws_instance.cloudera_master.private_dns}"
-#--scm-host ${master_internal_dns}
+#  master_internal_dns = "${module.cloudera.master_private_dns_fqdn}"
 }
 module "rds" {
   source             = "../../modules/rds_ec2_eph/rds/"
@@ -45,8 +44,9 @@ module "network" {
   availability_zone_1  = "us-east-1f" #az all used resources in
   availability_zone_2  = "us-east-1a" #az for rds replica
 }
-# this below is prob still here as it was a victory to figure it out with Redshift
-# but then RDS didn't need it as it has the URI by itself
-#output "endpoint_var" {
-#  value = "substr(${module.rds.rds_endpoint},0, -5)"
-#}
+output "master_public_ip_env" {
+  value = "${module.cloudera.master_public_ip}"
+}
+output "worker_private_ip_env" {
+  value = "${module.cloudera.worker_private_ip}"
+}

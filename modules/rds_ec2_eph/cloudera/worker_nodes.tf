@@ -16,7 +16,7 @@ resource "aws_instance" "cloudera_worker" {
   placement_group = "${aws_placement_group.cloudera.id}"
 # leaving this here in case the need for ephemeral comes up
   ephemeral_block_device {
-    device_name = "/dev/sde",
+    device_name = "/dev/sde"
     virtual_name = "ephemeral0"
   }
 # leaving this here in case the need for non-ephemeral comes up
@@ -56,48 +56,15 @@ resource "aws_instance" "cloudera_worker" {
         mkdir /usr/local/cloudera
         printf "/dev/mapper/VolGroup01-cloudera /usr/local/cloudera  ext4    defaults        0 0" >> /etc/fstab
         mount -a
+        printf "sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'" >> /etc/rc.d/rc.local
+        printf "sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'" >> /etc/rc.d/rc.local
+        printf "sysctl vm.swappiness=1" >> /etc/rc.d/rc.local
+        yum -y install -y oracle-j2sdk1.7
+        wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/
+        yum install -y cloudera-manager-daemons cloudera-manager-server
         EOF
+}
 
-#  provisioner "file" {
-#    source = "${path.module}/script.sh"
-#    destination = "~/script.sh"
-#  }
-#  provisioner "remote-exec" {
-#    inline = [
-#      "sudo chmod +x ~/script.sh",
-#      "sudo ~/script.sh"
-#    ]
-#  }
-
-#  provisioner "file" {
-#    source = "${path.module}/script1.sh"
-#    destination = "~/script1.sh"
-#  }
-#  provisioner "remote-exec" {
-#    inline = [
-#     "sudo chmod +x ~/script1.sh",
-#      "sudo ~/script1.sh"
-#    ]
-#  }
-
-#  provisioner "file" {
-#    source = "jupyter_notebook_config.py"
-#    destination = "~/.jupyter/jupyter_notebook_config.py"
-#  }
-#
-#  provisioner "file" {
-#    source = "scripts/script2.sh"
-#    destination = "~/script2.sh"
-#  }
-#  provisioner "remote-exec" {
-#    inline = [
-#      "chmod +x ~/script2.sh",
-#      "~/script2.sh"
-#    ]
-#  }
-
-#  connection {
-#    user = "${var.instance_username}"
-#    private_key = "${file("${var.path_to_privkey}")}"
-# }
+output "worker_private_ip" {
+  value = "${aws_instance.cloudera_worker.*.private_ip}"
 }

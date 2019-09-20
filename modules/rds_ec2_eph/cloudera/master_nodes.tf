@@ -28,9 +28,9 @@ output "placement_group_output" {
    value = "${aws_placement_group.cloudera.id}"
 }
 
-data "template_file" "sql_script" {
-  template = "${file("${path.module}/rds_sql.sh.tpl")}"
-  vars {
+data "template_file" "script_master" {
+  template = "${file("${path.module}/master_install.tpl")}"
+  vars = {
     redshift_usr_name = "${data.aws_ssm_parameter.db_master.value}"
     redshift_secret = "${data.aws_ssm_parameter.db_pw.value}"
     rds_address = "${var.rds_address}"
@@ -47,12 +47,12 @@ resource "aws_instance" "cloudera_master" {
   subnet_id = "${var.subnet_pub}"
   associate_public_ip_address = true
   placement_group = "${aws_placement_group.cloudera.id}"
-# leaving this here in case the need for non-ephemeral comes up
+# leaving here in case the need for ephemeral comes up, comment out on disuse
   ephemeral_block_device {
-    device_name = "/dev/sde",
+    device_name = "/dev/sde"
     virtual_name = "ephemeral0"
   }
-# leaving this here in case the need for non-ephemeral comes up
+# leaving here in case a non-ephemeral need comes up, comment out on disuse
 #  ebs_block_device {
 #   volume_size    = 20,
 #    device_name    = "/dev/sdf"
@@ -73,61 +73,37 @@ resource "aws_instance" "cloudera_master" {
   # instance profile
   iam_instance_profile = "${data.aws_iam_instance_profile.cloudera_master.name}"
 
+#  connection {
+#    type = "ssh"
+#    user = "${var.instance_username}"
+#    private_key = "${file("${var.path_to_privkey}")}"
+#    host = "${aws_instance.cloudera_master[count.index].public_ip}"
+#  }
+
   #bunch of bash stuff
+#  provisioner "file" {
+#    source = "${path.module}/rds_conf.sql"
+#    destination = "/home/maintuser/rds_conf.sql"
+#  }
 
-  provisioner "file" {
-    source = "${path.module}/script_master.sh"
-    destination = "/home/maintuser/script_master.sh"
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "sudo chmod +x ~/script_master.sh",
-      "sudo /home/maintuser/script_master.sh"
-    ]
-  }
-  provisioner "file" {
-    content      = "${data.template_file.sql_script.rendered}"
-    destination = "/home/maintuser/rds_sql.sh"
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "sudo chmod +x /home/maintuser/rds_sql.sh",
-      "sudo /home/maintuser/rds_sql.sh"
-      ]
-  }
+  user_data = "${data.template_file.script_master.rendered}"
 
 #  provisioner "file" {
-#    source = "${path.module}/script1.sh"
-#    destination = "~/script1.sh"
+#    source = "${data.template_file.script_master.rendered}"
+#    source = "${path.module}/master_install.sh"
+#    destination = "/home/maintuser/master_install.sh"
 #  }
 #  provisioner "remote-exec" {
 #    inline = [
-#      "sudo chmod +x ~/script1.sh",
-#      "sudo ~/script1.sh"
+#      "sudo chmod +x ~/master_install.sh",
+#      "sudo /home/maintuser/master_install.sh"
 #    ]
 #  }
+}
 
-#  provisioner "file" {
-#    source = "jupyter_notebook_config.py"
-#    destination = "~/.jupyter/jupyter_notebook_config.py"
-#  }
-#
-#  provisioner "file" {
-#    source = "scripts/script2.sh"
-#    destination = "~/script2.sh"
-#  }
-#  provisioner "remote-exec" {
-#    inline = [
-#      "chmod +x ~/script2.sh",
-#      "~/script2.sh"
-#    ]
-#  }
-
-  connection {
-    user = "${var.instance_username}"
-    private_key = "${file("${var.path_to_privkey}")}"
-  }
+output "master_public_ip" {
+  value = "${aws_instance.cloudera_master.*.public_ip}"
 }
 #output "master_private_dns_fqdn" {
-#   value = "${aws_instance.cloudera_master.private_dns}"
+#   value = "${aws_instance.cloudera_master.*.private_dns}"
 #}

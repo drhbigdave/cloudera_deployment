@@ -39,7 +39,7 @@ resource "aws_route_table" "us-east-public" {
         gateway_id = "${aws_internet_gateway.int_gw.id}"
     }
 
-    tags {
+    tags = {
         Name = "Cloudera Public Subnet"
     }
 }
@@ -109,7 +109,7 @@ resource "aws_route_table" "us-east-private" {
         nat_gateway_id = "${aws_nat_gateway.nat_gw.id}"
     }
 
-    tags {
+    tags = {
         Name = "Cloudera Private Subnet route table"
     }
 }
