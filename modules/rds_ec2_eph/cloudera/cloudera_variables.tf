@@ -1,7 +1,5 @@
 variable "environment" {}
-variable "amis" {
-	description = "used in instance.tf for cloudera instance resource"
-}
+variable "amis" {}
 variable "cloudera_master_inst_type" {}
 variable "cloudera_worker_inst_type" {}
 variable "cloudera_master_count" {}
@@ -19,3 +17,5 @@ variable "cloudera_pub_sg_name_tag" {}
 variable "rds_address" {}
 variable "rds_db_name" {}
 variable "rds_port" {}
+variable "master_root_vol_size" {}
+variable "worker_root_vol_size" {}

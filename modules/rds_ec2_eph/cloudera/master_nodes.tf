@@ -47,6 +47,9 @@ resource "aws_instance" "cloudera_master" {
   subnet_id = "${var.subnet_pub}"
   associate_public_ip_address = true
   placement_group = "${aws_placement_group.cloudera.id}"
+  root_block_device {
+    volume_size = "${var.master_root_vol_size}"
+  }
 # leaving here in case the need for ephemeral comes up, comment out on disuse
   ephemeral_block_device {
     device_name = "/dev/sde"
@@ -73,32 +76,9 @@ resource "aws_instance" "cloudera_master" {
   # instance profile
   iam_instance_profile = "${data.aws_iam_instance_profile.cloudera_master.name}"
 
-#  connection {
-#    type = "ssh"
-#    user = "${var.instance_username}"
-#    private_key = "${file("${var.path_to_privkey}")}"
-#    host = "${aws_instance.cloudera_master[count.index].public_ip}"
-#  }
-
-  #bunch of bash stuff
-#  provisioner "file" {
-#    source = "${path.module}/rds_conf.sql"
-#    destination = "/home/maintuser/rds_conf.sql"
-#  }
-
+  # user data master_install
   user_data = "${data.template_file.script_master.rendered}"
 
-#  provisioner "file" {
-#    source = "${data.template_file.script_master.rendered}"
-#    source = "${path.module}/master_install.sh"
-#    destination = "/home/maintuser/master_install.sh"
-#  }
-#  provisioner "remote-exec" {
-#    inline = [
-#      "sudo chmod +x ~/master_install.sh",
-#      "sudo /home/maintuser/master_install.sh"
-#    ]
-#  }
 }
 
 output "master_public_ip" {

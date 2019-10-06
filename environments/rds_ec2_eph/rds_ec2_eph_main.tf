@@ -2,11 +2,13 @@ module "cloudera" {
   sg_count           = 1
   source             = "../../modules/rds_ec2_eph/cloudera/"
   environment        = "dev"
-  amis               = "ami-0574062183ccc507a"
+  amis               = "ami-0a3bc2f18f51ef379"
   cloudera_master_inst_type = "c5d.large"
-  cloudera_worker_inst_type = "r5ad.large"
-  cloudera_master_count = 2
-  cloudera_worker_count = 2
+  cloudera_worker_inst_type = "c5d.large"  #"r5ad.large"
+  cloudera_master_count = 1
+  cloudera_worker_count = 1
+  master_root_vol_size = 65
+  worker_root_vol_size = 65
   availability_zone  = "us-east-1f" #az for all cloudera resources, 1f required for r5ad inst type
   instance_username  = "maintuser"
   path_to_privkey    = "~/projects/tf_keys/spark-mykey"
