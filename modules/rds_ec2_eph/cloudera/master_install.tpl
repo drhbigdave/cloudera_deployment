@@ -42,6 +42,8 @@ aws s3 cp s3://cloudera-drh/rds_conf.sql /home/maintuser/
 scmhost=$(curl -sS http://169.254.169.254/latest/meta-data/local-hostname)
 mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret} < /home/maintuser/rds_conf.sql > ~/sql_output.txt
 /usr/share/cmf/schema/scm_prepare_database.sh mysql -h ${rds_address} -u temp -ptemp --scm-host "$scmhost" scm scm_user scm_pwd
+touch /home/maintuser/sql_output
+printf "mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret}" >> /home/maintuser/sql_output
 service cloudera-scm-server start
 yum -q remove -y dracut-fips\*
 mv -v /boot/initramfs-$(uname -r).img{,.FIPS-bak}

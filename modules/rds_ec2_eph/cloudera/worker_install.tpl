@@ -37,8 +37,8 @@ printf 'echo never > /sys/kernel/mm/transparent_hugepage/enabled\n' >> /etc/rc.d
 printf 'echo never > /sys/kernel/mm/transparent_hugepage/defrag\n' >> /etc/rc.d/rc.local
 printf "vm.swappiness=1\n" >> /etc/sysctl.conf
 chmod +x /etc/rc.d/rc.local
-mkdir /home/maintuser/sql_output
-printf "mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret}"
+touch /home/maintuser/sql_output
+printf "mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret}" >> /home/maintuser/sql_output
 yum -q remove -y dracut-fips\*
 mv -v /boot/initramfs-$(uname -r).img{,.FIPS-bak}
 dracut -v
