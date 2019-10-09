@@ -17,5 +17,5 @@ variable "cloudera_pub_sg_name_tag" {}
 variable "rds_address" {}
 variable "rds_db_name" {}
 variable "rds_port" {}
-variable "master_root_vol_size" {}
+#variable "master_root_vol_size" {}
 variable "worker_root_vol_size" {}

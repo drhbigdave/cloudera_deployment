@@ -16,6 +16,14 @@ data "template_file" "script_worker" {
   }
 }
 
+resource "aws_placement_group" "cloudera" {
+  name     = "cloudera-pg"
+  strategy = "cluster"
+}
+output "placement_group_output" {
+   value = "${aws_placement_group.cloudera.id}"
+}
+
 resource "aws_instance" "cloudera_worker" {
   ami = "${var.amis}"
   instance_type = "${var.cloudera_worker_inst_type}"
@@ -38,7 +46,7 @@ resource "aws_instance" "cloudera_worker" {
 #   volume_size    = 20,
 #    device_name    = "/dev/sdf"
 #  }
-#  tags {
+#  tags = {
 #    Name = "cloudera_worker${count.index}"
 #  }
 

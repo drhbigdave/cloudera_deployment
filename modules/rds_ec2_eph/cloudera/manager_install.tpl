@@ -1,13 +1,14 @@
 #!/bin/bash
-/usr/bin/growpart /dev/nvme0n1 2
-pvresize /dev/nvme0n1p2
-lvresize -r -l 100%FREE VolGroup00/rootVol
+# expands rootVol leaving here for future use
+#/usr/bin/growpart /dev/nvme0n1 2
+#pvresize /dev/nvme0n1p2
+#lvresize -r -l 100%FREE VolGroup00/rootVol
 pvcreate /dev/nvme1n1
 vgcreate /dev/VolGroup01 /dev/nvme1n1
 lvcreate -n cloudera -l 100%FREE VolGroup01
 sudo mkfs -t ext4  /dev/VolGroup01/cloudera
-mkdir /usr/local/cloudera
-printf "/dev/mapper/VolGroup01-cloudera /usr/local/cloudera  ext4    defaults        0 0" >> /etc/fstab
+mkdir /opt/cloudera
+printf "/dev/mapper/VolGroup01-cloudera /opt/cloudera  ext4    defaults        0 0" >> /etc/fstab
 mount -a
 sudo yum update -y
 sudo yum install -y java-1.8.0-openjdk
@@ -41,9 +42,11 @@ chmod +x /etc/rc.d/rc.local
 aws s3 cp s3://cloudera-drh/rds_conf.sql /home/maintuser/
 scmhost=$(curl -sS http://169.254.169.254/latest/meta-data/local-hostname)
 mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret} < /home/maintuser/rds_conf.sql > ~/sql_output.txt
-/usr/share/cmf/schema/scm_prepare_database.sh mysql -h ${rds_address} -u temp -ptemp --scm-host "$scmhost" scm scm_user scm_pwd
+/usr/share/cmf/schema/scm_prepare_database.sh mysql -h ${rds_address} -u temp -ptemp --scm-host "$scmhost" scm scm_user "${rds_scm_password}"
 touch /home/maintuser/sql_output
-printf "mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret}" >> /home/maintuser/sql_output
+printf "mysql -h ${rds_address} -u ${redshift_usr_name} -P ${rds_port} -p${redshift_secret}\n" >> /home/maintuser/sql_output
+printf "${rds_scm_password}" >> /home/maintuser/sql_output
+printf "$scmhost" >> /home/maintuser/sql_output
 service cloudera-scm-server start
 yum -q remove -y dracut-fips\*
 mv -v /boot/initramfs-$(uname -r).img{,.FIPS-bak}

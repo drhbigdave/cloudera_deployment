@@ -1,13 +1,13 @@
 #!/bin/bash
-/usr/bin/growpart /dev/nvme0n1 2
-pvresize /dev/nvme0n1p2
-lvresize -r -l 100%FREE VolGroup00/rootVol
+#/usr/bin/growpart /dev/nvme0n1 2
+#pvresize /dev/nvme0n1p2
+#lvresize -r -l 100%FREE VolGroup00/rootVol
 pvcreate /dev/nvme1n1
 vgcreate /dev/VolGroup01 /dev/nvme1n1
 lvcreate -n cloudera -l 100%FREE VolGroup01
 sudo mkfs -t ext4  /dev/VolGroup01/cloudera
-mkdir /usr/local/cloudera
-printf "/dev/mapper/VolGroup01-cloudera /usr/local/cloudera  ext4    defaults        0 0" >> /etc/fstab
+mkdir /opt/cloudera
+printf "/dev/mapper/VolGroup01-cloudera /opt/cloudera  ext4    defaults        0 0" >> /etc/fstab
 mount -a
 sudo yum update -y
 sudo yum install -y java-1.8.0-openjdk
