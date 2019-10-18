@@ -6,8 +6,8 @@ pvcreate /dev/nvme1n1
 vgcreate /dev/VolGroup01 /dev/nvme1n1
 lvcreate -n cloudera -l 100%FREE VolGroup01
 sudo mkfs -t ext4  /dev/VolGroup01/cloudera
-mkdir /opt/cloudera
-printf "/dev/mapper/VolGroup01-cloudera /opt/cloudera  ext4    defaults        0 0" >> /etc/fstab
+mkdir /usr/local/cloudera
+printf "/dev/mapper/VolGroup01-cloudera /usr/local/cloudera  ext4    defaults        0 0" >> /etc/fstab
 mount -a
 sudo yum update -y
 sudo yum install -y java-1.8.0-openjdk
@@ -17,7 +17,7 @@ curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 sudo python get-pip.py
 pip install awscli
 yum install -y openscap-scanner scap-security-guide
-oscap xccdf eval --remediate --profile  standard --results scan-xccdf-results.xml /usr/share/xml/scap/ssg/content/ssg-amzn2-xccdf.xml
+#oscap xccdf eval --remediate --profile  standard --results scan-xccdf-results.xml /usr/share/xml/scap/ssg/content/ssg-amzn2-xccdf.xml
 wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.41.tar.gz
 tar zxvf mysql-connector-java-5.1.41.tar.gz
 mkdir -p /usr/share/java/

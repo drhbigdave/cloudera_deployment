@@ -52,7 +52,7 @@ resource "aws_instance" "cloudera_master" {
 #    device_name = "/dev/sde"
 #    virtual_name = "ephemeral0"
 #  }
- leaving here in case a non-ephemeral need comes up, comment out on disuse
+# leaving here in case a non-ephemeral need comes up, comment out on disuse
   ebs_block_device {
    volume_size    = 20
     device_name    = "/dev/sdf"

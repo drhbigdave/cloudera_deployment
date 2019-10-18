@@ -52,3 +52,6 @@ output "master_public_ip_env" {
 output "worker_private_ip_env" {
   value = "${module.cloudera.worker_private_ip}"
 }
+output "rds_address_env" {
+  value = "${module.rds.rds_address}"
+}
